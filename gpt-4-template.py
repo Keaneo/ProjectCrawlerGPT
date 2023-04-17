@@ -92,6 +92,10 @@ assistant_reply = response.choices[0]
 print('Response: ')
 print(assistant_reply.message['content'] + '\n')
 
+with open("responses.txt", "a+", encoding='utf-8') as f:
+    f.write('Question: ' + user_prompt['content'] + '\n')
+    f.write('Answer: \n\n' + assistant_reply.message['content'] + '\n\n\n')
+
 #Append the assistant's reply to the conversation
 with open("conversation.json", "a+", encoding='utf-8') as f:
     f.write('\n')
