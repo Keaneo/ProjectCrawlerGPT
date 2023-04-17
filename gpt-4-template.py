@@ -7,8 +7,8 @@ from pprint import pprint
 import json
 import token_counter
 
-openai.api_key = ""
-openai.organization = ""
+openai.api_key = os.environ.get('GPT4API')
+openai.organization = os.environ.get('OPENAI_ORG')
 
 def get_folder_path():
     root = tk.Tk()
@@ -68,7 +68,8 @@ user_prompt = {"role": "user", "content": str(input("Ask your question about thi
 
 messages_to_send.append(user_prompt)
 
-messages_to_send = messages_to_send[1:]
+if messages_to_send[1]["role"] == "system":
+    messages_to_send = messages_to_send[1:]
 
 for obj in messages_to_send:
     for key, value in obj.items():
@@ -78,7 +79,7 @@ for obj in messages_to_send:
             messages_to_send[messages_to_send.index(obj)][key] = value
 
 #Record messages
-with open("conversation.json", "a+", encoding='utf-8') as f:
+with open("conversation.json", "w+", encoding='utf-8') as f:
     f.write('\n')
     f.write(json.dumps(messages_to_send, ensure_ascii=False)[:-1] + ',')
 
