@@ -1,2 +1,4 @@
 __pycache__/spinner.cpython-310.pyc
 __pycache__/token_counter.cpython-310.pyc
+*.pyc
+testprint.py

@@ -31,7 +31,17 @@ messages_to_send = [
         You'll need to determine the file type of each file.
         After each file, respond with only a brief description of what it is. If it contains code, summarise the purpose and make a list of the function names.
         Once all have been provided, you'll then be asked a question on the project as a whole and you'll need to answer it. This may involve writing multiple new files.
-        Reply with the simplest text answer you can, or if you're writing code, only include the code and no additional text (unless the code needs environmental changes in order to work).
+        Reply with the simplest text answer you can.
+
+        IMPORTANT INFORMATION FOR YOUR RESPONSES:
+        If you reply with a new code file, reply in this format:
+        \{code\}
+        \{filenameextension\}
+        [THE CODE]
+
+        If you reply with something like an essay or message to a user, reply in this format:
+        \{textfile\}
+        [THE TEXT]
     """}
 ]
 
@@ -95,6 +105,15 @@ print(assistant_reply.message['content'] + '\n')
 with open("responses.txt", "a+", encoding='utf-8') as f:
     f.write('Question: ' + user_prompt['content'] + '\n')
     f.write('Answer: \n\n' + assistant_reply.message['content'] + '\n\n\n')
+
+print("code" + assistant_reply.message['content'].splitlines()[1][2:-2])
+
+if assistant_reply.message['content'].partition('\n')[0] == f'{{code}}':
+    with open("code" + assistant_reply.message['content'].splitlines()[1][2:-2], "w+", encoding='utf-8') as f:
+        f.write(assistant_reply.message['content'].partition('\n')[2] + '\n')
+elif assistant_reply.message['content'].partition('\n')[0] == f'{{textfile}}':
+    with open("textfile.txt", "w+", encoding='utf-8') as f:
+        f.write(assistant_reply.message['content'].partition('\n')[1] + '\n')
 
 #Append the assistant's reply to the conversation
 with open("conversation.json", "a+", encoding='utf-8') as f:
